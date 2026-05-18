@@ -89,15 +89,16 @@ function Home() {
           <li><a href="#skills" onClick={() => setIsMenuOpen(false)}>{t.skills}</a></li>
           <li><a href="#projects" onClick={() => setIsMenuOpen(false)}>{t.projects}</a></li>
           <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>{t.contact}</a></li>
-          <li className="desktop-controls" style={{ display: 'flex', gap: '0.5rem' }}>
-            <button className="theme-toggle" onClick={toggleLang} aria-label="Toggle Language" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-              {lang === 'vi' ? 'EN' : 'VI'}
-            </button>
-            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-          </li>
         </ul>
+
+        <div className="desktop-controls" style={{ display: 'flex', gap: '0.5rem', position: 'absolute', right: '5%' }}>
+          <button className="theme-toggle" onClick={toggleLang} aria-label="Toggle Language" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+            {lang === 'vi' ? 'EN' : 'VI'}
+          </button>
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
       </header>
 
       <main>
