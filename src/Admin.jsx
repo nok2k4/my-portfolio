@@ -6,8 +6,19 @@ function Admin() {
   const { data, updateData } = useContext(DataContext);
   const [lang, setLang] = useState('vi');
   const [formData, setFormData] = useState(data);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
 
   const currentData = formData[lang];
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (passwordInput === '0345626882Aa@') {
+      setIsAuthenticated(true);
+    } else {
+      alert('Mật khẩu không chính xác!');
+    }
+  };
 
   const handleHeroChange = (e) => {
     const { name, value } = e.target;
@@ -66,6 +77,27 @@ function Admin() {
   const cardStyle = { background: 'var(--card-bg)', padding: '2rem', borderRadius: '15px', marginBottom: '2rem' };
   const deleteBtnStyle = { background: '#ef4444', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.9rem', float: 'right' };
   const addBtnStyle = { background: '#10b981', color: 'white', padding: '0.8rem 1.5rem', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', display: 'block', width: '100%', marginTop: '1rem' };
+
+  if (!isAuthenticated) {
+    return (
+      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+        <form onSubmit={handleLogin} style={cardStyle}>
+          <h2 style={{ marginBottom: '1rem', textAlign: 'center' }}>Đăng nhập Quản Trị</h2>
+          <input 
+            type="password" 
+            placeholder="Nhập mật khẩu..." 
+            value={passwordInput} 
+            onChange={(e) => setPasswordInput(e.target.value)}
+            style={inputStyle}
+          />
+          <button type="submit" style={{ ...addBtnStyle, marginTop: '1rem', background: '#3b82f6' }}>Đăng nhập</button>
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>← Quay lại trang chủ</Link>
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto', color: 'white', paddingBottom: '100px' }}>
