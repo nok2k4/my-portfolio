@@ -11,6 +11,7 @@ const defaultData = {
       avatarUrl: "/avatar.jpg"
     },
     experience: [
+      { id: 0, title: "Freelancer (Làm việc tự do)", date: "Hiện tại", desc: "Làm việc tự do tại nhà. Thực hiện công việc đào tạo và huấn luyện Trí tuệ nhân tạo (AI Training) trên nền tảng TCS, Lark." },
       { id: 1, title: "Đại học Công nghệ Thông tin (UIT)", date: "Hiện tại", desc: "Đang theo học chuyên ngành Trí tuệ nhân tạo (AI)." },
       { id: 2, title: "Mở hộ kinh doanh đồng giá 18K Mimi Mart", date: "10/2024 - 10/2025", desc: "Kinh doanh offline và quản lý gian hàng sàn thương mại điện tử (Tiktok, Shopee, Lazada)." },
       { id: 3, title: "Nhân viên kỹ thuật IT - Laptop Trần Khanh", date: "07/2024", desc: "Sửa lỗi, bảo trì hệ thống và hỗ trợ khách hàng về phần mềm & phần cứng máy tính." },
@@ -43,6 +44,7 @@ const defaultData = {
       avatarUrl: "/avatar.jpg"
     },
     experience: [
+      { id: 0, title: "Freelancer", date: "Present", desc: "Working as a freelancer from home. Performing AI Training tasks on TCS and Lark platforms." },
       { id: 1, title: "University of Information Technology (UIT)", date: "Present", desc: "Currently studying Artificial Intelligence (AI)." },
       { id: 2, title: "Mimi Mart (18K Fixed Price Store)", date: "10/2024 - 10/2025", desc: "Offline business and e-commerce store management (Tiktok, Shopee, Lazada)." },
       { id: 3, title: "IT Technician - Laptop Tran Khanh", date: "07/2024", desc: "Troubleshooting, system maintenance, and customer support for software & hardware." },
@@ -71,12 +73,12 @@ const defaultData = {
 
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState(() => {
-    const savedData = localStorage.getItem('portfolioDataV2');
+    const savedData = localStorage.getItem('portfolioDataV3');
     return savedData ? JSON.parse(savedData) : defaultData;
   });
 
   useEffect(() => {
-    localStorage.setItem('portfolioDataV2', JSON.stringify(data));
+    localStorage.setItem('portfolioDataV3', JSON.stringify(data));
   }, [data]);
 
   const updateData = (lang, section, newData) => {
