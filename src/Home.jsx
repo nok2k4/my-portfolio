@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { DataContext } from './DataContext';
 import CustomCursor from './CustomCursor';
+import FacebookChat from './FacebookChat';
 
 const uiText = {
   vi: {
@@ -46,6 +47,8 @@ function Home() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [lang, setLang] = useState(localStorage.getItem('lang') || 'vi');
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -64,23 +67,37 @@ function Home() {
   return (
     <>
       <CustomCursor />
+      <FacebookChat />
       <header className="header">
         <div className="logo">Ngọc Tech</div>
-        <ul className="nav-links">
-          <li><a href="#home">{t.home}</a></li>
-          <li><a href="#about">{t.about}</a></li>
-          <li><a href="#skills">{t.skills}</a></li>
-          <li><a href="#projects">{t.projects}</a></li>
-          <li><a href="#contact">{t.contact}</a></li>
-        </ul>
-        <div style={{ display: 'flex', gap: '1rem', marginLeft: '2rem', position: 'absolute', right: '5%' }}>
-          <button className="theme-toggle" onClick={toggleLang} aria-label="Toggle Language" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+        
+        <div className="mobile-controls">
+          <button className="theme-toggle" onClick={toggleLang} aria-label="Toggle Language" style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>
             {lang === 'vi' ? 'EN' : 'VI'}
           </button>
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
+          <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
+
+        <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+          <li><a href="#home" onClick={() => setIsMenuOpen(false)}>{t.home}</a></li>
+          <li><a href="#about" onClick={() => setIsMenuOpen(false)}>{t.about}</a></li>
+          <li><a href="#skills" onClick={() => setIsMenuOpen(false)}>{t.skills}</a></li>
+          <li><a href="#projects" onClick={() => setIsMenuOpen(false)}>{t.projects}</a></li>
+          <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>{t.contact}</a></li>
+          <li className="desktop-controls" style={{ display: 'flex', gap: '0.5rem' }}>
+            <button className="theme-toggle" onClick={toggleLang} aria-label="Toggle Language" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              {lang === 'vi' ? 'EN' : 'VI'}
+            </button>
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+          </li>
+        </ul>
       </header>
 
       <main>
@@ -97,7 +114,7 @@ function Home() {
               </div>
             </div>
             <div className="hero-image-container">
-              <img src="/avatar.jpg" alt={content.hero.name} className="avatar" onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300.png?text=Avatar'; }} />
+              <img src={content.hero.avatarUrl || "/avatar.jpg"} alt={content.hero.name} className="avatar" onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300.png?text=Avatar'; }} />
               <div className="avatar-glow"></div>
             </div>
           </div>

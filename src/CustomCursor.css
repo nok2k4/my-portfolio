@@ -7,14 +7,16 @@ body, a, button {
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background-color: #fff;
+  background-color: var(--accent-color);
   border-radius: 50%;
   position: fixed;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9999;
-  transition: transform 0.2s ease;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  /* Only transition transform scale/color, NOT position */
+  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
 }
 
 .cursor-outline {
@@ -23,11 +25,12 @@ body, a, button {
   border: 1.5px solid var(--accent-color);
   border-radius: 50%;
   position: fixed;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9998;
-  /* Smooth trailing effect */
-  transition: top 0.15s ease-out, left 0.15s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  /* Only transition visual styles, position is handled by requestAnimationFrame */
+  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .glow-cursor {
@@ -36,17 +39,16 @@ body, a, button {
   background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
   border-radius: 50%;
   position: fixed;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9997;
-  /* Even smoother/slower trailing for the glow */
-  transition: top 0.4s ease-out, left 0.4s ease-out;
 }
 
 /* Hover effects for links and buttons */
 .cursor-dot.hover {
-  transform: translate(-50%, -50%) scale(0.1);
-  background-color: var(--accent-color);
+  width: 0px;
+  height: 0px;
 }
 
 .cursor-outline.hover {

@@ -125,6 +125,9 @@ function Admin() {
       <div style={cardStyle}>
         <h3 style={{ marginBottom: '1rem' }}>1. Giới Thiệu (Hero Section)</h3>
         <div>
+          <label style={labelStyle}>Ảnh đại diện (Link/URL):</label>
+          <input type="text" name="avatarUrl" value={currentData.hero.avatarUrl || ''} onChange={handleHeroChange} style={inputStyle} placeholder="Ví dụ: /avatar.jpg hoặc https://link-anh.com/anh.jpg" />
+
           <label style={labelStyle}>Họ và Tên:</label>
           <input type="text" name="name" value={currentData.hero.name} onChange={handleHeroChange} style={inputStyle} />
           
@@ -137,7 +140,7 @@ function Admin() {
       </div>
 
       <div style={cardStyle}>
-        <h3 style={{ marginBottom: '1rem' }}>2. Thông Tin Liên Hệ</h3>
+        <h3 style={{ marginBottom: '1rem' }}>2. Thông Tin Liên Hệ & Chat</h3>
         <div>
           <label style={labelStyle}>Số điện thoại:</label>
           <input type="text" name="phone" value={currentData.contact.phone} onChange={handleContactChange} style={inputStyle} />
@@ -150,6 +153,9 @@ function Admin() {
           
           <label style={labelStyle}>LinkedIn:</label>
           <input type="text" name="linkedin" value={currentData.contact.linkedin} onChange={handleContactChange} style={inputStyle} />
+
+          <label style={labelStyle}>Facebook Page ID (Để bật Ô Chat Messenger):</label>
+          <input type="text" name="fbPageId" value={currentData.contact.fbPageId || ''} onChange={handleContactChange} style={inputStyle} placeholder="Ví dụ: 10423456789 (Xem hướng dẫn lấy ID ở Facebook)" />
         </div>
       </div>
 

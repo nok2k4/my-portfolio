@@ -7,7 +7,8 @@ const defaultData = {
     hero: {
       name: "QUÁCH VĂN NGỌC",
       role: "Nhân Viên IT & Sinh Viên AI tại UIT",
-      description: "Chuyên ngành Ứng dụng phần mềm & Xử lý dữ liệu. Đam mê Trí tuệ nhân tạo (AI), phát triển web, quản trị hệ thống và tự động hóa."
+      description: "Chuyên ngành Ứng dụng phần mềm & Xử lý dữ liệu. Đam mê Trí tuệ nhân tạo (AI), phát triển web, quản trị hệ thống và tự động hóa.",
+      avatarUrl: "/avatar.jpg"
     },
     experience: [
       { id: 1, title: "Đại học Công nghệ Thông tin (UIT)", date: "Hiện tại", desc: "Đang theo học chuyên ngành Trí tuệ nhân tạo (AI)." },
@@ -30,14 +31,16 @@ const defaultData = {
       address: "Tân Chánh Hiệp, Quận 12, TP.HCM",
       phone: "0345-626-882",
       email: "ngocqv.it@gmail.com",
-      linkedin: "linkedin.com/in/ngọc-quách"
+      linkedin: "linkedin.com/in/ngọc-quách",
+      fbPageId: ""
     }
   },
   en: {
     hero: {
       name: "QUACH VAN NGOC",
       role: "IT Staff & AI Student at UIT",
-      description: "Majoring in Software Application & Data Processing. Passionate about Artificial Intelligence (AI), web development, system administration, and automation."
+      description: "Majoring in Software Application & Data Processing. Passionate about Artificial Intelligence (AI), web development, system administration, and automation.",
+      avatarUrl: "/avatar.jpg"
     },
     experience: [
       { id: 1, title: "University of Information Technology (UIT)", date: "Present", desc: "Currently studying Artificial Intelligence (AI)." },
@@ -60,7 +63,8 @@ const defaultData = {
       address: "Tan Chanh Hiep, District 12, HCMC",
       phone: "0345-626-882",
       email: "ngocqv.it@gmail.com",
-      linkedin: "linkedin.com/in/ngọc-quách"
+      linkedin: "linkedin.com/in/ngọc-quách",
+      fbPageId: ""
     }
   }
 };

@@ -128,6 +128,24 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--accent-color);
 }
 
+.desktop-controls {
+  display: flex;
+}
+
+.mobile-controls {
+  display: none;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
 .theme-toggle {
   background: none;
   border: none;
@@ -560,10 +578,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.5rem;
   }
   
-  .nav-links {
-    display: none;
-  }
-  
   .logo {
     position: relative;
     left: auto;
@@ -571,5 +585,44 @@ h1, h2, h3, h4, h5, h6 {
   
   .header {
     justify-content: space-between;
+  }
+
+  .desktop-controls {
+    display: none !important;
+  }
+  
+  .mobile-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: absolute;
+    right: 5%;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--header-bg);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(16px);
+  }
+
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
   }
 }
