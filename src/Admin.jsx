@@ -63,6 +63,25 @@ function Admin() {
     }
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Giới hạn dung lượng file khoảng 2MB để tránh lỗi quota localStorage
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ 
+          ...formData, 
+          [lang]: { ...currentData, hero: { ...currentData.hero, avatarUrl: reader.result } } 
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const saveChanges = () => {
     updateData(lang, 'hero', currentData.hero);
     updateData(lang, 'contact', currentData.contact);
@@ -106,7 +125,7 @@ function Admin() {
         <Link to="/" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 'bold' }}>← Quay lại Trang Chủ</Link>
       </div>
 
-      <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <strong>Chọn ngôn ngữ để chỉnh sửa:</strong>
         <button 
           onClick={() => setLang('vi')} 
@@ -125,8 +144,16 @@ function Admin() {
       <div style={cardStyle}>
         <h3 style={{ marginBottom: '1rem' }}>1. Giới Thiệu (Hero Section)</h3>
         <div>
-          <label style={labelStyle}>Ảnh đại diện (Link/URL):</label>
-          <input type="text" name="avatarUrl" value={currentData.hero.avatarUrl || ''} onChange={handleHeroChange} style={inputStyle} placeholder="Ví dụ: /avatar.jpg hoặc https://link-anh.com/anh.jpg" />
+          <label style={labelStyle}>Ảnh đại diện:</label>
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+            <input type="text" name="avatarUrl" value={currentData.hero.avatarUrl || ''} onChange={handleHeroChange} style={{...inputStyle, marginBottom: 0, flex: 1, minWidth: '200px'}} placeholder="Nhập link ảnh (URL)..." />
+            <div style={{ position: 'relative', overflow: 'hidden', display: 'inline-block' }}>
+              <button style={{ background: 'var(--accent-color)', color: 'white', padding: '0.8rem 1.5rem', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', width: '100%' }}>
+                📁 Tải ảnh lên từ máy
+              </button>
+              <input type="file" accept="image/*" onChange={handleImageUpload} style={{ position: 'absolute', top: 0, right: 0, minWidth: '100%', minHeight: '100%', fontSize: '100px', textAlign: 'right', filter: 'alpha(opacity=0)', opacity: 0, outline: 'none', background: 'white', cursor: 'pointer', display: 'block' }} />
+            </div>
+          </div>
 
           <label style={labelStyle}>Họ và Tên:</label>
           <input type="text" name="name" value={currentData.hero.name} onChange={handleHeroChange} style={inputStyle} />
