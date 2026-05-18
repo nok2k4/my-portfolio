@@ -5,18 +5,15 @@ body, a, button {
 }
 
 .cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--accent-color);
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   z-index: 9999;
-  /* Only transition transform scale/color, NOT position */
-  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .cursor-outline {
@@ -47,8 +44,7 @@ body, a, button {
 
 /* Hover effects for links and buttons */
 .cursor-dot.hover {
-  width: 0px;
-  height: 0px;
+  transform: scale(1.2);
 }
 
 .cursor-outline.hover {

@@ -13,7 +13,17 @@ const CustomCursor = () => {
   const outline = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const glow = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      setIsTouchDevice(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
     let animationFrameId;
 
     const onMouseMove = (e) => {
@@ -71,13 +81,19 @@ const CustomCursor = () => {
       window.removeEventListener('mouseout', handleMouseOut);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isTouchDevice]);
+
+  if (isTouchDevice) return null;
 
   return (
     <>
       <div ref={glowRef} className="glow-cursor"></div>
       <div ref={outlineRef} className={`cursor-outline ${isHovering ? 'hover' : ''}`}></div>
-      <div ref={dotRef} className={`cursor-dot ${isHovering ? 'hover' : ''}`}></div>
+      <div ref={dotRef} className={`cursor-dot ${isHovering ? 'hover' : ''}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent-color)" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(-20deg) scale(0.8)', marginLeft: '10px', marginTop: '10px' }}>
+          <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+        </svg>
+      </div>
     </>
   );
 };
