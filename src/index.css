@@ -40,12 +40,16 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   font-family: 'Inter', 'Space Grotesk', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  overflow-x: hidden;
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -274,6 +278,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-buttons {
   display: flex;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -624,5 +629,27 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
+  }
+  .contact-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .section {
+    padding: 4rem 5%;
+  }
+
+  .timeline-item {
+    padding-left: 30px;
+  }
+
+  .timeline-container::before {
+    left: 8px;
+  }
+
+  .timeline-item::before {
+    left: 2px;
   }
 }
