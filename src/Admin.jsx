@@ -72,7 +72,7 @@ function Admin() {
     alert(`Đã lưu toàn bộ thông tin cho ngôn ngữ: ${lang === 'vi' ? 'Tiếng Việt' : 'Tiếng Anh'}`);
   };
 
-  const inputStyle = { width: '100%', padding: '0.8rem', borderRadius: '5px', border: '1px solid #333', background: '#0f172a', color: 'white', marginBottom: '0.5rem' };
+  const inputStyle = { width: '100%', padding: '0.8rem', borderRadius: '5px', border: '1px solid var(--card-border)', background: 'var(--bg-color)', color: 'var(--text-color)', marginBottom: '0.5rem' };
   const labelStyle = { display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: 'var(--accent-color)' };
   const cardStyle = { background: 'var(--card-bg)', padding: '2rem', borderRadius: '15px', marginBottom: '2rem' };
   const deleteBtnStyle = { background: '#ef4444', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.9rem', float: 'right' };
@@ -80,7 +80,7 @@ function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }}>
+      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--text-color)' }}>
         <form onSubmit={handleLogin} style={cardStyle}>
           <h2 style={{ marginBottom: '1rem', textAlign: 'center' }}>Đăng nhập Quản Trị</h2>
           <input 
@@ -90,9 +90,9 @@ function Admin() {
             onChange={(e) => setPasswordInput(e.target.value)}
             style={inputStyle}
           />
-          <button type="submit" style={{ ...addBtnStyle, marginTop: '1rem', background: '#3b82f6' }}>Đăng nhập</button>
+          <button type="submit" style={{ ...addBtnStyle, marginTop: '1rem', background: 'var(--accent-color)' }}>Đăng nhập</button>
           <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-            <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>← Quay lại trang chủ</Link>
+            <Link to="/" style={{ color: 'var(--text-color)', textDecoration: 'none', opacity: 0.7 }}>← Quay lại trang chủ</Link>
           </div>
         </form>
       </div>
@@ -100,23 +100,23 @@ function Admin() {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto', color: 'white', paddingBottom: '100px' }}>
+    <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto', color: 'var(--text-color)', paddingBottom: '100px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h2>Quản Trị Viên (Admin Panel)</h2>
-        <Link to="/" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>← Quay lại Trang Chủ</Link>
+        <Link to="/" style={{ color: 'var(--accent-color)', textDecoration: 'none', fontWeight: 'bold' }}>← Quay lại Trang Chủ</Link>
       </div>
 
       <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <strong>Chọn ngôn ngữ để chỉnh sửa:</strong>
         <button 
           onClick={() => setLang('vi')} 
-          style={{ padding: '0.5rem 1rem', background: lang === 'vi' ? '#3b82f6' : '#333', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+          style={{ padding: '0.5rem 1rem', background: lang === 'vi' ? 'var(--accent-color)' : 'var(--card-bg)', color: lang === 'vi' ? 'white' : 'var(--text-color)', border: '1px solid var(--card-border)', borderRadius: '5px', cursor: 'pointer' }}
         >
           Tiếng Việt
         </button>
         <button 
           onClick={() => setLang('en')} 
-          style={{ padding: '0.5rem 1rem', background: lang === 'en' ? '#3b82f6' : '#333', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+          style={{ padding: '0.5rem 1rem', background: lang === 'en' ? 'var(--accent-color)' : 'var(--card-bg)', color: lang === 'en' ? 'white' : 'var(--text-color)', border: '1px solid var(--card-border)', borderRadius: '5px', cursor: 'pointer' }}
         >
           Tiếng Anh
         </button>
@@ -156,7 +156,7 @@ function Admin() {
       <div style={cardStyle}>
         <h3 style={{ marginBottom: '1rem' }}>3. Học Vấn & Kinh Nghiệm</h3>
         {currentData.experience.map((exp, index) => (
-          <div key={exp.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid #333', borderRadius: '5px', position: 'relative' }}>
+          <div key={exp.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid var(--card-border)', borderRadius: '5px', position: 'relative' }}>
             <button onClick={() => handleRemoveItem('experience', index)} style={deleteBtnStyle}>Xóa</button>
             <input type="text" value={exp.title} onChange={(e) => handleArrayChange('experience', index, 'title', e.target.value)} placeholder="Tên trường / Công ty" style={{...inputStyle, width: 'calc(100% - 80px)'}} />
             <input type="text" value={exp.date} onChange={(e) => handleArrayChange('experience', index, 'date', e.target.value)} placeholder="Thời gian (VD: 2022 - 2024)" style={inputStyle} />
@@ -169,7 +169,7 @@ function Admin() {
       <div style={cardStyle}>
         <h3 style={{ marginBottom: '1rem' }}>4. Kỹ Năng Chuyên Môn</h3>
         {currentData.skills.map((skill, index) => (
-          <div key={skill.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid #333', borderRadius: '5px', position: 'relative' }}>
+          <div key={skill.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid var(--card-border)', borderRadius: '5px', position: 'relative' }}>
             <button onClick={() => handleRemoveItem('skills', index)} style={deleteBtnStyle}>Xóa</button>
             <input type="text" value={skill.title} onChange={(e) => handleArrayChange('skills', index, 'title', e.target.value)} placeholder="Tên nhóm kỹ năng" style={{...inputStyle, width: 'calc(100% - 80px)'}} />
             <textarea value={skill.desc} onChange={(e) => handleArrayChange('skills', index, 'desc', e.target.value)} placeholder="Chi tiết kỹ năng (cách nhau bằng dấu phẩy)" rows="2" style={inputStyle} />
@@ -181,7 +181,7 @@ function Admin() {
       <div style={cardStyle}>
         <h3 style={{ marginBottom: '1rem' }}>5. Dự Án Nổi Bật</h3>
         {currentData.projects.map((proj, index) => (
-          <div key={proj.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid #333', borderRadius: '5px', position: 'relative' }}>
+          <div key={proj.id} style={{ marginBottom: '1.5rem', padding: '1rem', border: '1px solid var(--card-border)', borderRadius: '5px', position: 'relative' }}>
             <button onClick={() => handleRemoveItem('projects', index)} style={deleteBtnStyle}>Xóa</button>
             <input type="text" value={proj.title} onChange={(e) => handleArrayChange('projects', index, 'title', e.target.value)} placeholder="Tên dự án" style={{...inputStyle, width: 'calc(100% - 80px)'}} />
             <input type="text" value={proj.link || ''} onChange={(e) => handleArrayChange('projects', index, 'link', e.target.value)} placeholder="Link dự án (nếu có)" style={inputStyle} />
