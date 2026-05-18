@@ -66,7 +66,6 @@ function Home() {
 
   return (
     <>
-      <CustomCursor />
       <FacebookChat />
       <header className="header">
         <div className="logo">Ngọc Tech</div>
