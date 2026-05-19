@@ -33,6 +33,7 @@ const defaultData = {
       phone: "0345-626-882",
       email: "ngocqv.it@gmail.com",
       linkedin: "linkedin.com/in/ngọc-quách",
+      github: "nok2k4",
       fbPageId: ""
     }
   },
@@ -66,15 +67,100 @@ const defaultData = {
       phone: "0345-626-882",
       email: "ngocqv.it@gmail.com",
       linkedin: "linkedin.com/in/ngọc-quách",
+      github: "nok2k4",
       fbPageId: ""
     }
   }
 };
 
+export const sortExperiences = (list) => {
+  if (!list || !Array.isArray(list)) return [];
+  
+  const parseDateStr = (dateStr) => {
+    if (!dateStr) return { end: 0, start: 0 };
+    const str = dateStr.trim().toLowerCase();
+    
+    // Split by common range separators like '-', 'to', 'đến'
+    const parts = str.split(/[-–—]|đến|to/).map(p => p.trim());
+    
+    const parsePart = (part) => {
+      if (!part) return 0;
+      if (part === 'hiện tại' || part === 'present' || part.includes('hiện tại') || part.includes('present')) {
+        return Infinity; // Represents current/ongoing date
+      }
+      
+      // Match MM/YYYY (e.g., 10/2024)
+      const monthYearMatch = part.match(/(\d{1,2})\/(\d{4})/);
+      if (monthYearMatch) {
+        const month = parseInt(monthYearMatch[1], 10);
+        const year = parseInt(monthYearMatch[2], 10);
+        return year * 12 + month;
+      }
+      
+      // Match YYYY (e.g., 2024)
+      const yearMatch = part.match(/(\d{4})/);
+      if (yearMatch) {
+        const year = parseInt(yearMatch[1], 10);
+        return year * 12 + 6; // Mid-year approximation for years without month
+      }
+      
+      return 0;
+    };
+    
+    const startVal = parsePart(parts[0]);
+    const endVal = parts.length > 1 ? parsePart(parts[1]) : startVal;
+    
+    return { end: endVal, start: startVal };
+  };
+
+  return [...list].sort((a, b) => {
+    const valA = parseDateStr(a.date);
+    const valB = parseDateStr(b.date);
+    
+    // Sort descending by end date (newest first)
+    if (valB.end !== valA.end) {
+      return valB.end - valA.end;
+    }
+    // If end dates are identical, sort descending by start date
+    return valB.start - valA.start;
+  });
+};
+
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState(() => {
     const savedData = localStorage.getItem('portfolioDataV3');
-    return savedData ? JSON.parse(savedData) : defaultData;
+    const parsed = savedData ? JSON.parse(savedData) : defaultData;
+    
+    // Tự động bổ sung các trường mới từ defaultData nếu localStorage cũ thiếu
+    if (parsed.vi) {
+      if (!parsed.vi.contact.github) {
+        parsed.vi.contact.github = defaultData.vi.contact.github || "";
+      }
+      if (parsed.vi.contact.showGithub === undefined) {
+        parsed.vi.contact.showGithub = true;
+      }
+      if (parsed.vi.contact.hiddenRepos === undefined) {
+        parsed.vi.contact.hiddenRepos = "";
+      }
+      if (parsed.vi.experience) {
+        parsed.vi.experience = sortExperiences(parsed.vi.experience);
+      }
+    }
+    if (parsed.en) {
+      if (!parsed.en.contact.github) {
+        parsed.en.contact.github = defaultData.en.contact.github || "";
+      }
+      if (parsed.en.contact.showGithub === undefined) {
+        parsed.en.contact.showGithub = true;
+      }
+      if (parsed.en.contact.hiddenRepos === undefined) {
+        parsed.en.contact.hiddenRepos = "";
+      }
+      if (parsed.en.experience) {
+        parsed.en.experience = sortExperiences(parsed.en.experience);
+      }
+    }
+    return parsed;
   });
 
   useEffect(() => {
@@ -82,13 +168,44 @@ export const DataProvider = ({ children }) => {
   }, [data]);
 
   const updateData = (lang, section, newData) => {
-    setData(prev => ({
-      ...prev,
-      [lang]: {
-        ...prev[lang],
-        [section]: newData
+    setData(prev => {
+      let processedData = newData;
+      if (section === 'experience') {
+        processedData = sortExperiences(newData);
       }
-    }));
+      
+      const otherLang = lang === 'vi' ? 'en' : 'vi';
+      let updatedState = {
+        ...prev,
+        [lang]: {
+          ...prev[lang],
+          [section]: processedData
+        }
+      };
+
+      // Tự động đồng bộ hóa ảnh đại diện (avatarUrl) sang ngôn ngữ còn lại
+      if (section === 'hero') {
+        updatedState[otherLang] = {
+          ...updatedState[otherLang],
+          hero: {
+            ...updatedState[otherLang].hero,
+            avatarUrl: processedData.avatarUrl
+          }
+        };
+      }
+      
+      // Tự động đồng bộ hóa toàn bộ thông tin liên hệ sang ngôn ngữ còn lại
+      if (section === 'contact') {
+        updatedState[otherLang] = {
+          ...updatedState[otherLang],
+          contact: {
+            ...processedData
+          }
+        };
+      }
+
+      return updatedState;
+    });
   };
 
   return (

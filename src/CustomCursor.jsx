@@ -38,11 +38,11 @@ const CustomCursor = () => {
 
     const animate = () => {
       // Easing formula: current += (target - current) * ease
-      outline.current.x += (mouse.current.x - outline.current.x) * 0.15;
-      outline.current.y += (mouse.current.y - outline.current.y) * 0.15;
+      outline.current.x += (mouse.current.x - outline.current.x) * 0.22;
+      outline.current.y += (mouse.current.y - outline.current.y) * 0.22;
 
-      glow.current.x += (mouse.current.x - glow.current.x) * 0.05;
-      glow.current.y += (mouse.current.y - glow.current.y) * 0.05;
+      glow.current.x += (mouse.current.x - glow.current.x) * 0.08;
+      glow.current.y += (mouse.current.y - glow.current.y) * 0.08;
 
       // Apply transform using translate3d for GPU acceleration
       if (outlineRef.current) {

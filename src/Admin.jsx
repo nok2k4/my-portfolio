@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { DataContext } from './DataContext';
+import { DataContext, sortExperiences } from './DataContext';
 import { Link } from 'react-router-dom';
 
 function Admin() {
@@ -22,18 +22,29 @@ function Admin() {
 
   const handleHeroChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ 
-      ...formData, 
-      [lang]: { ...currentData, hero: { ...currentData.hero, [name]: value } } 
-    });
+    if (name === 'avatarUrl') {
+      // Đồng bộ ảnh đại diện sang cả 2 phiên bản
+      setFormData(prev => ({ 
+        ...prev, 
+        vi: { ...prev.vi, hero: { ...prev.vi.hero, avatarUrl: value } },
+        en: { ...prev.en, hero: { ...prev.en.hero, avatarUrl: value } }
+      }));
+    } else {
+      setFormData(prev => ({ 
+        ...prev, 
+        [lang]: { ...prev[lang], hero: { ...prev[lang].hero, [name]: value } } 
+      }));
+    }
   };
 
   const handleContactChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ 
-      ...formData, 
-      [lang]: { ...currentData, contact: { ...currentData.contact, [name]: value } } 
-    });
+    // Đồng bộ thông tin liên hệ sang cả 2 phiên bản
+    setFormData(prev => ({ 
+      ...prev, 
+      vi: { ...prev.vi, contact: { ...prev.vi.contact, [name]: value } },
+      en: { ...prev.en, contact: { ...prev.en.contact, [name]: value } }
+    }));
   };
 
   const handleArrayChange = (section, index, field, value) => {
@@ -73,22 +84,58 @@ function Admin() {
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData({ 
-          ...formData, 
-          [lang]: { ...currentData, hero: { ...currentData.hero, avatarUrl: reader.result } } 
-        });
+        // Đồng bộ ảnh tải lên từ máy tính sang cả 2 phiên bản
+        setFormData(prev => ({ 
+          ...prev, 
+          vi: { ...prev.vi, hero: { ...prev.vi.hero, avatarUrl: reader.result } },
+          en: { ...prev.en, hero: { ...prev.en.hero, avatarUrl: reader.result } }
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTimelineLogoUpload = (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 1 * 1024 * 1024) {
+        alert("Ảnh quá lớn! Vui lòng chọn ảnh dưới 1MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleArrayChange('experience', index, 'logoUrl', reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const saveChanges = () => {
-    updateData(lang, 'hero', currentData.hero);
-    updateData(lang, 'contact', currentData.contact);
-    updateData(lang, 'experience', currentData.experience);
-    updateData(lang, 'skills', currentData.skills);
-    updateData(lang, 'projects', currentData.projects);
-    alert(`Đã lưu toàn bộ thông tin cho ngôn ngữ: ${lang === 'vi' ? 'Tiếng Việt' : 'Tiếng Anh'}`);
+    const sortedExpVi = sortExperiences(formData.vi.experience);
+    const sortedExpEn = sortExperiences(formData.en.experience);
+    
+    // Cập nhật state local ngay lập tức cho cả 2 ngôn ngữ
+    setFormData(prev => ({
+      ...prev,
+      vi: { ...prev.vi, experience: sortedExpVi },
+      en: { ...prev.en, experience: sortedExpEn }
+    }));
+
+    // Lưu Tiếng Việt lên context và localStorage
+    updateData('vi', 'hero', formData.vi.hero);
+    updateData('vi', 'contact', formData.vi.contact);
+    updateData('vi', 'experience', sortedExpVi);
+    updateData('vi', 'skills', formData.vi.skills);
+    updateData('vi', 'projects', formData.vi.projects);
+
+    // Lưu Tiếng Anh lên context và localStorage
+    updateData('en', 'hero', formData.en.hero);
+    updateData('en', 'contact', formData.en.contact);
+    updateData('en', 'experience', sortedExpEn);
+    updateData('en', 'skills', formData.en.skills);
+    updateData('en', 'projects', formData.en.projects);
+
+    alert("Đã lưu toàn bộ thông tin cho CẢ TIẾNG VIỆT và TIẾNG ANH thành công!");
   };
 
   const inputStyle = { width: '100%', padding: '0.8rem', borderRadius: '5px', border: '1px solid var(--card-border)', background: 'var(--bg-color)', color: 'var(--text-color)', marginBottom: '0.5rem' };
@@ -181,6 +228,19 @@ function Admin() {
           <label style={labelStyle}>LinkedIn:</label>
           <input type="text" name="linkedin" value={currentData.contact.linkedin} onChange={handleContactChange} style={inputStyle} />
 
+          <label style={labelStyle}>GitHub Username:</label>
+          <input type="text" name="github" value={currentData.contact.github || ''} onChange={handleContactChange} style={inputStyle} placeholder="Ví dụ: nok2k4" />
+
+          <label style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', margin: '0.8rem 0 0.8rem 0' }}>
+            <input type="checkbox" checked={currentData.contact.showGithub !== false} onChange={(e) => {
+              handleContactChange({ target: { name: 'showGithub', value: e.target.checked } });
+            }} style={{ width: 'auto', marginBottom: 0, cursor: 'pointer' }} />
+            Hiển thị danh sách dự án từ GitHub trên trang chủ
+          </label>
+
+          <label style={labelStyle}>Tên các repository GitHub muốn ẩn (cách nhau bằng dấu phẩy):</label>
+          <input type="text" name="hiddenRepos" value={currentData.contact.hiddenRepos || ''} onChange={handleContactChange} style={inputStyle} placeholder="Ví dụ: my-portfolio, private-project" />
+
           <label style={labelStyle}>Facebook Page ID (Để bật Ô Chat Messenger):</label>
           <input type="text" name="fbPageId" value={currentData.contact.fbPageId || ''} onChange={handleContactChange} style={inputStyle} placeholder="Ví dụ: 10423456789 (Xem hướng dẫn lấy ID ở Facebook)" />
         </div>
@@ -194,9 +254,19 @@ function Admin() {
             <input type="text" value={exp.title} onChange={(e) => handleArrayChange('experience', index, 'title', e.target.value)} placeholder="Tên trường / Công ty" style={{...inputStyle, width: 'calc(100% - 80px)'}} />
             <input type="text" value={exp.date} onChange={(e) => handleArrayChange('experience', index, 'date', e.target.value)} placeholder="Thời gian (VD: 2022 - 2024)" style={inputStyle} />
             <textarea value={exp.desc} onChange={(e) => handleArrayChange('experience', index, 'desc', e.target.value)} placeholder="Mô tả chi tiết" rows="2" style={inputStyle} />
+            
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', alignItems: 'center' }}>
+              <div style={{ flex: 1 }}>
+                <input type="text" value={exp.logoUrl || ''} onChange={(e) => handleArrayChange('experience', index, 'logoUrl', e.target.value)} placeholder="Link logo (URL) hoặc bấm Tải logo ở bên cạnh" style={{...inputStyle, marginBottom: 0}} />
+              </div>
+              <div>
+                <input type="file" accept="image/*" onChange={(e) => handleTimelineLogoUpload(e, index)} style={{ display: 'none' }} id={`timeline-logo-${index}`} />
+                <label htmlFor={`timeline-logo-${index}`} style={{ ...addBtnStyle, padding: '0.4rem 0.8rem', fontSize: '0.85rem', cursor: 'pointer', display: 'inline-block', margin: 0 }}>📁 Tải logo</label>
+              </div>
+            </div>
           </div>
         ))}
-        <button onClick={() => handleAddItem('experience', {title: '', date: '', desc: ''})} style={addBtnStyle}>+ Thêm Kinh Nghiệm / Học Vấn</button>
+        <button onClick={() => handleAddItem('experience', {title: '', date: '', desc: '', logoUrl: ''})} style={addBtnStyle}>+ Thêm Kinh Nghiệm / Học Vấn</button>
       </div>
 
       <div style={cardStyle}>
@@ -219,6 +289,11 @@ function Admin() {
             <input type="text" value={proj.title} onChange={(e) => handleArrayChange('projects', index, 'title', e.target.value)} placeholder="Tên dự án" style={{...inputStyle, width: 'calc(100% - 80px)'}} />
             <input type="text" value={proj.link || ''} onChange={(e) => handleArrayChange('projects', index, 'link', e.target.value)} placeholder="Link dự án (nếu có)" style={inputStyle} />
             <textarea value={proj.desc} onChange={(e) => handleArrayChange('projects', index, 'desc', e.target.value)} placeholder="Mô tả dự án" rows="3" style={inputStyle} />
+            
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.8rem', cursor: 'pointer', color: 'var(--text-color)', fontSize: '0.9rem', fontWeight: 'bold' }}>
+              <input type="checkbox" checked={proj.visible !== false} onChange={(e) => handleArrayChange('projects', index, 'visible', e.target.checked)} style={{ width: 'auto', marginBottom: 0, cursor: 'pointer' }} />
+              Hiển thị dự án này trên trang chủ
+            </label>
           </div>
         ))}
         <button onClick={() => handleAddItem('projects', {title: '', desc: '', link: ''})} style={addBtnStyle}>+ Thêm Dự Án</button>

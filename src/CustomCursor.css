@@ -14,7 +14,8 @@ body, a, button, input, textarea, select {
   left: 0;
   pointer-events: none;
   z-index: 9999;
-  transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+  /* Bỏ transition trên transform để tránh bị trễ/lag khi di chuột */
+  transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
 }
 
@@ -28,8 +29,8 @@ body, a, button, input, textarea, select {
   left: 0;
   pointer-events: none;
   z-index: 9998;
-  /* Only transition visual styles, position is handled by requestAnimationFrame */
-  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  /* Chỉ transition các thuộc tính trực quan, tọa độ di chuyển do requestAnimationFrame xử lý */
+  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
 }
 
 .glow-cursor {
@@ -44,9 +45,11 @@ body, a, button, input, textarea, select {
   z-index: 9997;
 }
 
-/* Hover effects for links and buttons */
+/* Hiệu ứng hover cho link và button */
 .cursor-dot.hover {
-  transform: scale(0.1);
+  width: 4px;
+  height: 4px;
+  opacity: 0.6;
 }
 
 .cursor-outline.hover {
